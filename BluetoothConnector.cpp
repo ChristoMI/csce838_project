@@ -3,27 +3,38 @@
 
 class BluetoothConnector
 {
-    BluetoothConnector()    //Constructor
-    {
+    public uint48_t address;
+    public unsigned long pktId;
 
+    BluetoothConnector(uint48_t address)    //Constructor
+    {
+        this.address = address;
+        this.pktId = 0;
     }
     
-    void initConn(uint16_t address, uint16_t destination)  
+    void initConn(uint48_t pairer, uint48_t pairee)  
     {
 
     }
 
-    pkt createPkt(unsigned long id, uint16_t address, uint16_t destination, string message)
+    pkt createPkt(uint48_t dest, string message)
+    {
+        pkt packet;
+        pkt* ptr = &packet;
+        ptr->id = pktId;
+        ptr->sender = this.address;
+        ptr->dest = dest;
+        ptr->message = message;
+        pktId++;
+        return packet;
+    }
+
+    void sendPkt(pkt* ptr)
     {
 
     }
 
-    void sendPkt(pkt packet)
-    {
-
-    }
-
-    pkt receivePkt(uint16_t address)
+    pkt receivePkt()
     {
 
     }
