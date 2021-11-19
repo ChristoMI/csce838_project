@@ -4,9 +4,7 @@
 
 typedef struct pkt
 {
-    unsigned long id;
-    uint48_t sender;
-    uint48_t dest;
+    unsigned long long id;
     string message;
 }pkt;
 
