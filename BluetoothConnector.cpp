@@ -79,20 +79,27 @@ class BluetoothConnector
 
     void SendPkt(pkt* ptr)
     {
+        pkt buf;
+        &buf = ptr;
         // send a message
         if( this.status == 0 ) {
-            this.status = write(this.socket, "hello!", 6);
+            this.status = write(this.socket, buf, sizeof(buf));
         }
-        if( this.status < 0 ) perror("error");
+        if( this.status < 0 ) perror("Packet unable to send.\n");
     }
 
-    pkt ListenPkt(char[1024] buf,)
+    pkt ListenPkt()
     {
         int bytes_read;
+        pkt buf;
         // read data from the client
         bytes_read = read(this.client, buf, sizeof(buf));
         if( bytes_read > 0 ) {
-            printf("received [%s]\n", buf);
+            return buf;
+        }
+        else {
+            perror("No packet received.\n");
+            return NULL;
         }
     }
 
