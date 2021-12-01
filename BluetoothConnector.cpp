@@ -34,7 +34,8 @@ class BluetoothConnector
         // bind socket to port 1 of the first available 
         // local bluetooth adapter
         loc_addr.rc_family = AF_BLUETOOTH;
-        loc_addr.rc_bdaddr = *BDADDR_ANY;
+        bdaddr_t tmp {0,0,0,0,0,0};
+        loc_addr.rc_bdaddr = tmp;   
         loc_addr.rc_channel = (uint8_t) 1;
         bind(this.socket, (struct sockaddr *)&loc_addr, sizeof(loc_addr));
 
