@@ -1,4 +1,5 @@
-#include "./pkt.h";
+#include "./pkt.h"
+#include "./boundingBox.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/socket.h>
@@ -66,13 +67,15 @@ class BluetoothConnector
         this.status = connect(this.socket, (struct sockaddr *)&addr, sizeof(addr));
     }
 
-    pkt CreatePkt(string message)
+    pkt CreatePkt(uint8_t carID, uint8_t sessionID, uint8_t objectClassID, uint32_t timestamp, boundingBox box)
     {
         pkt packet;
-        pkt* ptr = &packet;
-
-        ptr->id = this.pktId;
-        ptr->message = message;
+        packet.carID = carID;
+        packet.pktID = this.pktID;
+        packet.sessionID = sessionID;
+        packet.objectClassID = objectClassID;
+        packet.timestamp = timestamp;
+        packet.boundingBox = box;
 
         this.pktId++;
         return packet;
