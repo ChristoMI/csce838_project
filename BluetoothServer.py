@@ -1,4 +1,4 @@
-import socket
+import bluetooth
 
 ADDRESS = ''
 car1Address = ''
@@ -6,16 +6,12 @@ car2Address = ''
 PORT = 54321
 
 connections = []
-host = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host.setblocking(0)
-host.bind((ADDRESS, PORT))
-host.listen(2)
+server_sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
+server_sock.bind(("",PORT))
+server_sock.listen(2)
+waitingStatement = True
 
 def close_socket(connection):
-    try:
-        connection.shutdown(socket.SHUT_RDWR)
-    except:
-        pass
     try:
         connection.close()
     except:
@@ -24,9 +20,10 @@ def close_socket(connection):
 def read():
     for i in reversed(range(len(connections))):
         try:
-            data, sender = connections[i][0].recvfrom(1500)
+            data, sender = connections[i][0].recvfrom(1024)
+            print("Received " + data)
             return data, sender
-        except (BlockingIOError, socket.timeout, OSError):
+        except (BlockingIOError, server_sock.timeout, OSError):
             pass
         except (ConnectionResetError, ConnectionAbortedError):
             close_socket(connections[i][0])
@@ -34,16 +31,34 @@ def read():
     return b''  # return empty if no data found
 
 def writeToFile(data, sender):
+    data = data.split(';')
+    ds1 = str(data[0])
+    c1 =  str(data[1])
+    ts1 = str(data[2])
+    class1 = str(data[3])
+    bb1 = str(data[4])
     with open('mainLogFile.txt', 'w') as f:
-        f.write('\n'.join(data, sender))
+            f.write('\n session_id: ' + ds1)
+            f.write('\n car_id: ' + c1)
+            f.write('\n timestamp: ' + ts1)
+            f.write('\n object_class_id: ' + class1)
+            f.write('\n bounding_box: ' + bb1)
 
     if sender == car1Address:
         with open('car1LogFile.txt', 'w') as f:
-            f.write('\n'.join(data, sender))
+            f.write('\n session_id: ' + ds1)
+            f.write('\n car_id: ' + c1)
+            f.write('\n timestamp: ' + ts1)
+            f.write('\n object_class_id: ' + class1)
+            f.write('\n bounding_box: ' + bb1)
 
     if sender == car2Address:
         with open('car2LogFile.txt', 'w') as f:
-            f.write('\n'.join(data, sender))
+            f.write('\n session_id: ' + ds1)
+            f.write('\n car_id: ' + c1)
+            f.write('\n timestamp: ' + ts1)
+            f.write('\n object_class_id: ' + class1)
+            f.write('\n bounding_box: ' + bb1)
 
     # for i in reversed(range(len(connections))):
     #     try:
@@ -56,8 +71,12 @@ def writeToFile(data, sender):
 
 # Run the main loop
 while True:
+    if waitingStatement:
+        print("Waiting for connection...")
+        waitingStatement = False
+
     try:
-        con, addr = host.accept()
+        con, addr = server_sock.accept()
         connections.append((con, addr))
     except BlockingIOError:
         pass
@@ -73,4 +92,4 @@ while True:
 for i in reversed(range(len(connections))):
     close_socket(connections[i][0])
     connections.pop(i)
-close_socket(host)
+close_socket(server_sock)
