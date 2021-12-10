@@ -21,13 +21,13 @@ int main (int argc, char* argv[])
 	string eventTimeString = asctime(eventTime);
 
 	// checks reset error
-	/*
 	if(errorCode == 0)
 	{
-		// check /sys/kernel/pmc/tegra_reset_reason
-		// set description to reset reason
+		// check /sys/kernel/pmc/tegra_reset_reason, set description to reset reason
+		ifstream resetReasonPointer;
+		resetReasonPointer.open("/sys/kernel/pmc/tegra_reset_reason")
+		getline(resetReasonPointer, errorDesc)		
 	}
-	*/
 	
 	// builds string to write
 	string errorCodeString = to_string(errorCode);
