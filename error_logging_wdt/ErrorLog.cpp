@@ -38,7 +38,6 @@ int main (int argc, char* argv[])
 		ifstream resetReasonPointer;
 		resetReasonPointer.open(reg_path);
 		getline(resetReasonPointer, errorDesc);
-		//errorDesc = "test";
 		resetReasonPointer.close();	
 	}
 	

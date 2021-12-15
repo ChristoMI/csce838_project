@@ -1,3 +1,5 @@
+# python3 script is used to allow pybluez to execute properly (specifically - python 3.6)
+
 import sys
 import bluetooth
 import time
@@ -10,12 +12,12 @@ port = 1
 
 data = sys.argv[1]
 
-#data = "hello"
-
 start_time = time.time()
 
+# socket initialization
 sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
 
+# error-logging path
 executable_path = "/home/car/ryan_brown_ws/src/bluetooth_com/src/ErrorLog"
 
 try:
@@ -33,6 +35,7 @@ except bluetooth.btcommon.BluetoothError as e:
     print(e)
     split_e = str(e).split("]")
 
+    # retreiving error code and description
     code = split_e[0].split(" ")[1]
     description = split_e[1][1:len(split_e[1])]
     description = description.replace(" ", "\ ")
