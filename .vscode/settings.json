@@ -1,9 +1,0 @@
-{
-    "C_Cpp.default.cppStandard": "gnu++17",
-    "C_Cpp.default.cStandard": "c17",
-    "cSpell.words": [
-        "BTPROTO",
-        "RFCOMM",
-        "sckt"
-    ]
-}
